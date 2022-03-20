@@ -3,55 +3,35 @@ import "./style.css";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Link, useHistory } from 'react-router-dom';
-
 export default function Loginpage() {
-
-
-
-
   useEffect(() => {
     if (localStorage.getItem('token') && localStorage.getItem('role') === 'admin') {
       history.push('/admindashboard')
     }
-
     if (localStorage.getItem('token') && localStorage.getItem('role') === 'user') {
       history.push('/dashboard')
     }
   })
-
-
   const authAxios = axios.create({
     baseURL: "https://manoj-appointment-booking.herokuapp.com",
   });
-
-
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
   const history = useHistory()
-
-
   const { handleSubmit, errors } = useForm();
-
   const onSubmit = (data) => {
     let form_data = {
       email: email,
-
       password: password,
     };
-
-    console.log(form_data);
-
     authAxios.post("/api/users/login", form_data, {}).then((res) => {
-      console.log(res.data);
+      console.log(res)
       //{status: 'ok', data: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyM…Y0NH0.XtQZ5jzzbDf8dg5Tm-nJl-fa2Ottk-aScQP1GTts3ZI', name: 'asd', role: 'user', email: 'asd@gmail.com'}
-
-      if (res.status !== 'ok') {
+      if (res.data.status === 'Pending') {
         alert("Pending Account. Please Verify Your Email!");
       }
       else {
-        if (res.data.status === "ok") {
-          console.log("Got the token: ", res.data.data);
+        if (res.data.status === "Active") {
           localStorage.setItem("role", res.data.role);
           localStorage.setItem("name", res.data.name);
           localStorage.setItem("token", res.data.data);
@@ -66,11 +46,8 @@ export default function Loginpage() {
           alert("invalid credentials");
         }
       }
-
     });
-
   };
-
   return (
     <div>
       <video
@@ -95,7 +72,6 @@ export default function Loginpage() {
                 <span class="input-group-addon">
                   <i class="fa fa-user fa" aria-hidden="true"></i>
                 </span>
-
                 <input
                   placeholder="Enter Email"
                   name="firstname"
@@ -109,7 +85,6 @@ export default function Loginpage() {
                 />
               </div>
             </div>
-
             <div class="indv">
               <div class="input-group">
                 <span class="input-group-addon">
@@ -130,9 +105,7 @@ export default function Loginpage() {
               </div>
             </div>
             {/* <h5>Confirm Password</h5> */}
-
             <br></br>
-
             <div class="coolone">
               <button
                 class="col-md-10 indv"
@@ -143,7 +116,6 @@ export default function Loginpage() {
                 Login
               </button>
             </div>
-
             <span>
               Don't have a user account?{" "}
               <Link to="/">Sign Up Now</Link>

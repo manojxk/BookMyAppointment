@@ -15,7 +15,6 @@ export default function AdminRegister() {
   const authAxios = axios.create({
     baseURL: "https://manoj-appointment-booking.herokuapp.com",
   });
-
   const [authkey, setAuthkey] = useState("");
   const [email, setEmail] = useState("");
   const history = useHistory()

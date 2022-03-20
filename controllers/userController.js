@@ -26,7 +26,7 @@ const registerUser = async (req, res) => {
     });
     try {
         const user = await newAptuser.save();
-        sendMail(user.name, user.email, user.confirmationCode)
+        sendMail(user.name, user.email, user.confirmationCode, 'users')
         res.json(user);
     } catch (error) {
         if (error.code === 11000) {
@@ -62,7 +62,6 @@ const loginUser = async (req, res) => {
         res.json({ status: 'error', error: 'Invalid email/password' })
     }
 }
-
 const verifyUser = async (req, res) => {
     User.findOne({
         confirmationCode: req.params.confirmationCode,
@@ -88,7 +87,6 @@ const verifyUser = async (req, res) => {
         })
         .catch((e) => console.log("error", e));
 }
-
 module.exports = {
     registerUser,
     loginUser,

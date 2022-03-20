@@ -8,7 +8,7 @@ const pass = config.pass;
 
 
 const nodemailer = require("nodemailer");
-const sendMail = async (name, email, confirmationCode) => {
+const sendMail = async (name, email, confirmationCode, type) => {
 
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -28,7 +28,7 @@ const sendMail = async (name, email, confirmationCode) => {
     html: `<h1>Email Confirmation</h1>
         <h2>Hello ${name}</h2>
         <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
-        <a href=http://localhost:5000/api/users/confirm/${confirmationCode}> Click here</a>
+        <a href=http://localhost:5000/api/${type}/confirm/${confirmationCode}> Click here</a>
         </div>`,
   })
 }
