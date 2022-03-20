@@ -54,19 +54,7 @@ const loginUser = async (req, res) => {
                 },
                 process.env.JWT_SECRET
             )
-            if (user.status != "Active") {
-                return res.status(401).send({
-                    message: "Pending Account. Please Verify Your Email!", status: 'Pending',
-                });
-            }
-            return res.json({
-                status: 'ok',
-                data: token,
-                name: user.name,
-                role: user.type,
-                email: user.email,
-                status: user.status
-            })
+            return res.json(user)
         } else {
             res.json({ status: 'error', error: 'Invalid password' })
         }

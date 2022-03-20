@@ -3,6 +3,8 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Admin = require('../models/adminModel')
+const config = require('../config/auth.config.js');
+const { sendMail } = require("../config/nodemailer.config");
 require("dotenv").config();
 // @desc    Get the admins
 // @route   GET /api/admins
@@ -19,21 +21,19 @@ const getAllAdmins = async (req, res) => {
 // @route   POST /api/admins
 // @access  Private
 const register = async (req, res) => {
+    const token = jwt.sign({ email: req.body.email }, config.secret);
     const admin = new Admin({
         email: req.body.email,
         password: await bcrypt.hash(req.body.password, 10),
         authkey: req.body.authkey,
         type: "admin",
+        confirmationCode: token,
     });
-    if (req.body.password.length < 6) {
-        return res.json({
-            status: "error",
-            error: "Password too small. Should be atleast 6 characters",
-        });
-    }
+
     try {
-        const savedAptadmin = await admin.save();
-        res.json(savedAptadmin);
+        const admin = await admin.save();
+        sendMail(admin.name, admin.email, admin.confirmationCode)
+        res.json(admin);
     } catch (error) {
         if (error.code === 11000) {
             // duplicate key
@@ -58,6 +58,11 @@ const login = async (req, res) => {
                 },
                 process.env.JWT_SECRET
             )
+            if (user.status != "Active") {
+                return res.status(401).send({
+                    status: "Pending Account. Please Verify Your Email!", status: 'Pending',
+                });
+            }
             return res.json({
                 status: 'ok',
                 data: token,
