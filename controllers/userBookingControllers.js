@@ -27,7 +27,6 @@ const bookingsByEmail = async (req, res) => {
         res.json({ message: err });
     }
 }
-
 const registerBookings = async (req, res) => {
     const newUserbooking = new Userbooking({
         name: req.body.name,
@@ -40,10 +39,7 @@ const registerBookings = async (req, res) => {
         const savedUserbooking = await newUserbooking.save();
         res.json(savedUserbooking);
     } catch (error) {
-        if (error.code === 11000) {
-            // duplicate key
-            return res.json({ status: "error", error: "Booking cannot be done" });
-        }
+        return res.json({ status: "error", error: error });
     }
 }
 const deleteBooking = async (req, res) => {
