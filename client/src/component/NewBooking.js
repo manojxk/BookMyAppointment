@@ -15,16 +15,7 @@ export default function NewBooking() {
   let role = localStorage.getItem("role");
   let name = localStorage.getItem("name");
   let email = localStorage.getItem("email");
-  useEffect(() => {
-    axios.get("https://manoj-appointment-booking.herokuapp.com/api/bookings/" + email).then((res) => {
-      if (res.data === 0) {
-        console.log("no data");
-      } else {
-        console.log(res.data);
 
-      }
-    });
-  }, []);
   const history = useHistory()
   const onSubmit = () => {
     const newOne = new Date(date).toLocaleDateString("en-fr", {
