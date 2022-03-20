@@ -4,24 +4,24 @@ import TimePicker from "react-time-picker";
 import "./style.css";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import NavBar from "./NavBar";
 export default function NewBooking() {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
-  const [isBooked2, setBooked2] = useState("");
-  const { register, handleSubmit, errors, watch } = useForm();
+
+  const { handleSubmit } = useForm();
   let token = localStorage.getItem("token");
   let role = localStorage.getItem("role");
   let name = localStorage.getItem("name");
   let email = localStorage.getItem("email");
   useEffect(() => {
-    axios.get("https://souvik-appointment-bookingapp.herokuapp.com/userbookings/search/" + email).then((res) => {
-      if (res.data == 0) {
+    axios.get("https://manoj-appointment-booking.herokuapp.com/api/bookings/" + email).then((res) => {
+      if (res.data === 0) {
         console.log("no data");
       } else {
         console.log(res.data);
-        setBooked2(res.data[0].isBooked);
+
       }
     });
   }, []);
@@ -40,7 +40,7 @@ export default function NewBooking() {
       isBooked: true,
     };
     axios
-      .post("https://souvik-appointment-bookingapp.herokuapp.com/userbookings/add", booking_data)
+      .post("https://manoj-appointment-booking.herokuapp.com/api/bookings/", booking_data)
       .then((res) => {
         alert("booking done");
         history.push('./mybooking')

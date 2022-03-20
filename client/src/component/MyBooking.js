@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import "./style.css";
 import axios from "axios";
-import { Link } from "react-router-dom";
+
 import NavBar from "./NavBar";
 export default function MyBooking() {
   const [bookings, setBookings] = useState([]);
   let token = localStorage.getItem("token");
   let role = localStorage.getItem("role");
-  let name = localStorage.getItem("name");
+
   let email = localStorage.getItem("email");
   useEffect(() => {
     axios
-      .get("https://souvik-appointment-bookingapp.herokuapp.com/userbookings/search/" + email)
+      .get("https://manoj-appointment-booking.herokuapp.com/api/bookings/" + email)
       .then((res) => {
-        if (res.data == 0) {
+        if (res.data === 0) {
           console.log("no data");
         } else {
           console.log(res.data);
@@ -23,7 +23,7 @@ export default function MyBooking() {
   }, []);
   function clickDelete(id) {
     if (window.confirm("are you sure you want to delete the booking?")) {
-      axios.delete("https://souvik-appointment-bookingapp.herokuapp.com/userbookings/" + id).then((res) => {
+      axios.delete("https://manoj-appointment-booking.herokuapp.com/api/bookings/" + id).then((res) => {
         // console.log(res.data);
         window.location.reload();
       });
@@ -37,6 +37,7 @@ export default function MyBooking() {
       ) : (
         <div>
           <img
+            alt="pokemon"
             class="fillpic"
             src="/pokemon2.png"
             style={{ width: "100%", height: "auto" }}

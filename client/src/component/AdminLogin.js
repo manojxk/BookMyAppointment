@@ -20,17 +20,17 @@ export default function AdminLogin() {
   })
 
   const authAxios = axios.create({
-    baseURL: "https://souvik-appointment-bookingapp.herokuapp.com",
+    baseURL: "https://manoj-appointment-booking.herokuapp.com",
   });
 
-  let form_data = {};
+
   const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
   const history = useHistory()
 
 
-  const { register, handleSubmit, errors, watch } = useForm();
+  const { handleSubmit, errors } = useForm();
 
   const onSubmit = (data) => {
     let form_data = {
@@ -39,9 +39,9 @@ export default function AdminLogin() {
       password: password,
     };
 
-    console.log(form_data);
 
-    authAxios.post("/aptadmins/login", form_data, {}).then((res) => {
+
+    authAxios.post("/api/admins/login", form_data, {}).then((res) => {
       console.log(res.data);
 
 

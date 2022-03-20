@@ -21,7 +21,7 @@ export default function Register() {
 
 
   const authAxios = axios.create({
-    baseURL: "https://souvik-appointment-bookingapp.herokuapp.com",
+    baseURL: "https://manoj-appointment-booking.herokuapp.com",
 
   });
 
@@ -31,7 +31,7 @@ export default function Register() {
 
   const [password, setPassword] = useState("");
 
-  const { register, handleSubmit, errors, watch } = useForm();
+  const { handleSubmit, errors } = useForm();
 
   const onSubmit = (data) => {
     let form_data = {
@@ -46,7 +46,7 @@ export default function Register() {
       alert('Password should be atleast 6 characters long')
     } else {
       authAxios
-        .post("/aptusers/add", form_data)
+        .post("/api/users", form_data)
         .then((res) => {
           if (res.data) {
             alert('Registered successfully')

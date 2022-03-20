@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import NavBar from './NavBar'
 import "./style.css";
 
-import { useForm } from "react-hook-form";
-import axios from "axios";
+
 import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   let token = localStorage.getItem("token");
   let role = localStorage.getItem("role");
   let name = localStorage.getItem("name");
-  let email = localStorage.getItem("email");
+
 
 
 

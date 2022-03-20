@@ -10,7 +10,7 @@ import NewBooking from "./component/NewBooking";
 import MyBooking from "./component/MyBooking";
 import AllBooking from "./component/AllBooking";
 
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 
 function App() {

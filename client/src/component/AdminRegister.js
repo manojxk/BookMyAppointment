@@ -13,14 +13,14 @@ export default function AdminRegister() {
     }
   })
   const authAxios = axios.create({
-    baseURL: "https://souvik-appointment-bookingapp.herokuapp.com",
+    baseURL: "https://manoj-appointment-booking.herokuapp.com",
   });
-  let form_data = {};
+
   const [authkey, setAuthkey] = useState("");
   const [email, setEmail] = useState("");
   const history = useHistory()
   const [password, setPassword] = useState("");
-  const { register, handleSubmit, errors, watch } = useForm();
+  const { handleSubmit, errors } = useForm();
   const onSubmit = (data) => {
     let form_data = {
       email: email,
@@ -33,7 +33,7 @@ export default function AdminRegister() {
     else {
       console.log(form_data)
       authAxios
-        .post("/aptadmins/add", form_data)
+        .post("/api/admins", form_data)
         .then((res) => {
           if (res.data) {
             history.push('./AdminLogin')

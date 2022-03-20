@@ -21,7 +21,7 @@ export default function Loginpage() {
 
 
   const authAxios = axios.create({
-    baseURL: "https://souvik-appointment-bookingapp.herokuapp.com",
+    baseURL: "https://manoj-appointment-booking.herokuapp.com",
   });
 
 
@@ -31,7 +31,7 @@ export default function Loginpage() {
   const history = useHistory()
 
 
-  const { register, handleSubmit, errors, watch } = useForm();
+  const { handleSubmit, errors } = useForm();
 
   const onSubmit = (data) => {
     let form_data = {
@@ -42,7 +42,7 @@ export default function Loginpage() {
 
     console.log(form_data);
 
-    authAxios.post("/aptusers/login", form_data, {}).then((res) => {
+    authAxios.post("/api/users/login", form_data, {}).then((res) => {
       console.log(res.data);
       //{status: 'ok', data: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyM…Y0NH0.XtQZ5jzzbDf8dg5Tm-nJl-fa2Ottk-aScQP1GTts3ZI', name: 'asd', role: 'user', email: 'asd@gmail.com'}
 
