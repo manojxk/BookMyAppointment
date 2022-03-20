@@ -1,6 +1,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require('../models/userModel')
+const config = require('../config/auth.config.js');
+const { sendMail } = require("../config/nodemailer.config");
 //get the users
 const getAllUSers = async (req, res) => {
     try {
@@ -14,21 +16,18 @@ const getAllUSers = async (req, res) => {
 // @route   POST /api/users
 // @access  Public
 const registerUser = async (req, res) => {
+    const token = jwt.sign({ email: req.body.email }, config.secret);
     const newAptuser = new User({
         name: req.body.name,
         email: req.body.email,
         password: await bcrypt.hash(req.body.password, 10),
         type: "user",
+        confirmationCode: token,
     });
-    if (req.body.password.length < 6) {
-        return res.json({
-            status: "error",
-            error: "Password too small. Should be atleast 6 characters",
-        });
-    }
     try {
-        const savedAptuser = await newAptuser.save();
-        res.json(savedAptuser);
+        const user = await newAptuser.save();
+        sendMail(user.name, user.email, user.confirmationCode)
+        res.json(user);
     } catch (error) {
         if (error.code === 11000) {
             // duplicate key
@@ -55,12 +54,18 @@ const loginUser = async (req, res) => {
                 },
                 process.env.JWT_SECRET
             )
+            if (user.status != "Active") {
+                return res.status(401).send({
+                    message: "Pending Account. Please Verify Your Email!", status: 'Pending',
+                });
+            }
             return res.json({
                 status: 'ok',
                 data: token,
                 name: user.name,
                 role: user.type,
-                email: user.email
+                email: user.email,
+                status: user.status
             })
         } else {
             res.json({ status: 'error', error: 'Invalid password' })
@@ -69,14 +74,36 @@ const loginUser = async (req, res) => {
         res.json({ status: 'error', error: 'Invalid email/password' })
     }
 }
-// Generate JWT
-const generateToken = (id, email) => {
-    return jwt.sign({ id, email }, process.env.JWT_SECRET, {
-        expiresIn: '30d',
+
+const verifyUser = async (req, res) => {
+    User.findOne({
+        confirmationCode: req.params.confirmationCode,
     })
+        .then((user) => {
+            console.log(user);
+            if (!user) {
+                return res.status(404).send({ message: "User Not found." });
+            }
+            user.status = "Active";
+            user.save(function (err) {
+                // error occur
+                if (err) {
+                    return res.status(500).send({ msg: err.message });
+                }
+                // account successfully verified
+                else {
+                    return res
+                        .status(200)
+                        .send("Your account has been successfully verified");
+                }
+            });
+        })
+        .catch((e) => console.log("error", e));
 }
+
 module.exports = {
     registerUser,
     loginUser,
-    getAllUSers
+    getAllUSers,
+    verifyUser
 }

@@ -49,7 +49,7 @@ export default function Register() {
         .post("/api/users", form_data)
         .then((res) => {
           if (res.data) {
-            alert('Registered successfully')
+            alert('User was registered successfully! Please check your email')
             history.push('/login')
           } else {
             alert('Not able to register')

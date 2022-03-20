@@ -46,23 +46,27 @@ export default function Loginpage() {
       console.log(res.data);
       //{status: 'ok', data: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyM…Y0NH0.XtQZ5jzzbDf8dg5Tm-nJl-fa2Ottk-aScQP1GTts3ZI', name: 'asd', role: 'user', email: 'asd@gmail.com'}
 
-
-
-      if (res.data.status === "ok") {
-        console.log("Got the token: ", res.data.data);
-        localStorage.setItem("role", res.data.role);
-        localStorage.setItem("name", res.data.name);
-        localStorage.setItem("token", res.data.data);
-        localStorage.setItem("email", res.data.email);
-        if (res.data.role === 'admin') {
-          history.push('/admindashboard')
-        }
-        else {
-          history.push('/dashboard')
-        }
-      } else {
-        alert("invalid credentials");
+      if (res.data.status == 'Pending') {
+        alert("Pending Account. Please Verify Your Email!");
       }
+      else {
+        if (res.data.status === "ok") {
+          console.log("Got the token: ", res.data.data);
+          localStorage.setItem("role", res.data.role);
+          localStorage.setItem("name", res.data.name);
+          localStorage.setItem("token", res.data.data);
+          localStorage.setItem("email", res.data.email);
+          if (res.data.role === 'admin') {
+            history.push('/admindashboard')
+          }
+          else {
+            history.push('/dashboard')
+          }
+        } else {
+          alert("invalid credentials");
+        }
+      }
+
     });
 
   };
