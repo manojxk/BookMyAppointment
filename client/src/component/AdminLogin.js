@@ -3,63 +3,44 @@ import "./style.css";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Link, useHistory } from 'react-router-dom';
-
 export default function AdminLogin() {
-
-
-
-
   useEffect(() => {
     if (localStorage.getItem('token') && localStorage.getItem('role') === 'admin') {
       history.push('/admindashboard')
     }
-
     if (localStorage.getItem('token') && localStorage.getItem('role') === 'user') {
       history.push('/dashboard')
     }
   })
-
   const authAxios = axios.create({
     baseURL: "https://manoj-appointment-booking.herokuapp.com",
   });
-
-
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
   const history = useHistory()
-
-
   const { handleSubmit, errors } = useForm();
-
   const onSubmit = (data) => {
     let form_data = {
       email: email,
-
       password: password,
     };
-
-
-
     authAxios.post("/api/admins/login", form_data, {}).then((res) => {
-      console.log(res.data);
-
-
-
-      if (res.data.status === "ok") {
-        // everythign went fine
-        console.log("Got the token: ", res.data.data);
-        localStorage.setItem("role", res.data.role);
-        localStorage.setItem("token", res.data.data);
-        alert("Logged in successfully");
-        window.location = "/admindashboard";
-      } else {
-        alert("invalid credentials");
+      if (res.data.status === 'Pending') {
+        alert("Pending Account. Please Verify Your Email!");
       }
+      else {
+        if (res.data.status === "Active") {
+          localStorage.setItem("role", res.data.role);
+          localStorage.setItem("token", res.data.data);
+          alert("Logged in successfully");
+          window.location = "/admindashboard";
+        } else {
+          alert("invalid credentials");
+        }
+      }
+
     });
-
   };
-
   return (
     <div>
       <video
@@ -84,7 +65,6 @@ export default function AdminLogin() {
                 <span class="input-group-addon">
                   <i class="fa fa-user fa" aria-hidden="true"></i>
                 </span>
-
                 <input
                   placeholder="Enter Email"
                   name="firstname"
@@ -98,7 +78,6 @@ export default function AdminLogin() {
                 />
               </div>
             </div>
-
             <div class="indv">
               <div class="input-group">
                 <span class="input-group-addon">
@@ -119,9 +98,7 @@ export default function AdminLogin() {
               </div>
             </div>
             {/* <h5>Confirm Password</h5> */}
-
             <br></br>
-
             <div class="coolone">
               <button
                 class="col-md-10 indv"
@@ -132,7 +109,6 @@ export default function AdminLogin() {
                 Login
               </button>
             </div>
-
             <span>
               Don't have a admin account? {" "}
               <Link to="/adminregister">Sign Up Now</Link>

@@ -35,6 +35,7 @@ export default function AdminRegister() {
         .post("/api/admins", form_data)
         .then((res) => {
           if (res.data) {
+            alert('User was registered successfully! Please check your email')
             history.push('./AdminLogin')
           } else {
             alert('Not able to register')

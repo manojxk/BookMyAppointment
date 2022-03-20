@@ -25,8 +25,6 @@ export default function Loginpage() {
       password: password,
     };
     authAxios.post("/api/users/login", form_data, {}).then((res) => {
-      console.log(res)
-      //{status: 'ok', data: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyM…Y0NH0.XtQZ5jzzbDf8dg5Tm-nJl-fa2Ottk-aScQP1GTts3ZI', name: 'asd', role: 'user', email: 'asd@gmail.com'}
       if (res.data.status === 'Pending') {
         alert("Pending Account. Please Verify Your Email!");
       }
