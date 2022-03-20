@@ -91,7 +91,7 @@ export default function NewBooking() {
                       </button>
                     </div>
                     <p style={{ color: "lightgray" }}>
-                      Made by Souvik Das in 2021
+                      Made by Manoj in 2022
                     </p>
                   </form>
                 </div>
