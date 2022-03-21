@@ -1,5 +1,4 @@
-const express = require("express");
-const router = require("express").Router();
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Admin = require('../models/adminModel')
@@ -30,16 +29,15 @@ const register = async (req, res) => {
         confirmationCode: token,
     });
 
-    try {
-        const admin = await admin.save();
-        sendMail(admin.name, admin.email, admin.confirmationCode, 'admins')
-        res.json(admin);
-    } catch (error) {
-        if (error.code === 11000) {
-            // duplicate key
-            return res.json({ status: "error", error: "Username already in use" });
+    admin.save((err, admin) => {
+        if (err) {
+            res.json({ error: err });
         }
-    }
+        sendMail(admin.authkey, admin.email, admin.confirmationCode, 'admins')
+
+        res.json(admin);
+    });
+
 };
 const login = async (req, res) => {
     const { email, password } = req.body
