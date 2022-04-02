@@ -1,5 +1,5 @@
 module.exports = {
-  secret: "manoj-secret-key",
-  user: "sdemanojkumar@gmail.com",
-  pass: "Manoj@123",
+  secret: "demo-secret-key",
+  user: "demo@gmail.com",
+  pass: "demo@123",
 };
